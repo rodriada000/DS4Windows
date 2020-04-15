@@ -1304,7 +1304,6 @@ namespace DS4Windows
                 opt.inputtimer.Stop();
             else if (opt.Visible && tabMain.SelectedIndex == 1)
                 opt.inputtimer.Start();
-            Program.rootHub.eastertime = tabMain.SelectedTab == tabLog;
         }
 
         private void Items_MouseHover(object sender, EventArgs e)

@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{23ED4D43-0BE4-4344-9C5E-DCCFA6B66DBA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DS4Windows</RootNamespace>
+    <AssemblyName>DS4WindowsCore</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DS4Control\ControlSerivce.cs" />
+    <Compile Include="DS4Control\DS4LightBar.cs" />
+    <Compile Include="DS4Control\InputMethods.cs" />
+    <Compile Include="DS4Control\ITouchpadBehaviour.cs" />
+    <Compile Include="DS4Control\Log.cs" />
+    <Compile Include="DS4Control\Mapping.cs" />
+    <Compile Include="DS4Control\Mouse.cs" />
+    <Compile Include="DS4Control\MouseCursor.cs" />
+    <Compile Include="DS4Control\MouseWheel.cs" />
+    <Compile Include="DS4Control\ScpDevice.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DS4Control\ScpDevice.Designer.cs">
+      <DependentUpon>ScpDevice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DS4Control\ScpHub.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DS4Control\ScpHub.Designer.cs">
+      <DependentUpon>ScpHub.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DS4Control\ScpUtil.cs" />
+    <Compile Include="DS4Control\X360Device.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DS4Control\X360Device.designer.cs">
+      <DependentUpon>X360Device.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DS4Library\DS4Device.cs" />
+    <Compile Include="DS4Library\DS4Devices.cs" />
+    <Compile Include="DS4Library\DS4Sixaxis.cs" />
+    <Compile Include="DS4Library\DS4State.cs" />
+    <Compile Include="DS4Library\DS4StateExposed.cs" />
+    <Compile Include="DS4Library\DS4Touchpad.cs" />
+    <Compile Include="HidLibrary\Extensions.cs" />
+    <Compile Include="HidLibrary\HidDevice.cs" />
+    <Compile Include="HidLibrary\HidDeviceAttributes.cs" />
+    <Compile Include="HidLibrary\HidDeviceCapabilities.cs" />
+    <Compile Include="HidLibrary\HidDevices.cs" />
+    <Compile Include="HidLibrary\NativeMethods.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="HidLibrary\LICENSE.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Resources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -84,6 +84,7 @@ namespace DS4Windows
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {
                 rootHub = new ControlService();
+                Mapping.rootHub = rootHub;
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new DS4Form(args));

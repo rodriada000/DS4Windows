@@ -92,6 +92,10 @@ namespace DS4Windows
         public static int prevmouseaccel = 0;
         private static double horizontalRemainder = 0.0, verticalRemainder = 0.0;
 
+        // reference to control service root hub
+        public static ControlService rootHub;
+
+
         public static void Commit(int device)
         {
             SyntheticState state = deviceState[device];
@@ -1501,7 +1505,7 @@ namespace DS4Windows
                         }
                         else if (i >= 1000000)
                         {
-                            DS4Device d = Program.rootHub.DS4Controllers[device];
+                            DS4Device d = rootHub?.DS4Controllers[device];
                             string r = i.ToString().Substring(1);
                             byte heavy = (byte)(int.Parse(r[0].ToString()) * 100 + int.Parse(r[1].ToString()) * 10 + int.Parse(r[2].ToString()));
                             byte light = (byte)(int.Parse(r[3].ToString()) * 100 + int.Parse(r[4].ToString()) * 10 + int.Parse(r[5].ToString()));
@@ -1626,7 +1630,7 @@ namespace DS4Windows
                     }
                     DS4LightBar.forcedFlash[device] = 0;
                     DS4LightBar.forcelight[device] = false;
-                    Program.rootHub.DS4Controllers[device].setRumble(0, 0);
+                    rootHub?.DS4Controllers[device].setRumble(0, 0);
                     if (keyType.HasFlag(DS4KeyType.HoldMacro))
                     {
                         await Task.Delay(50);

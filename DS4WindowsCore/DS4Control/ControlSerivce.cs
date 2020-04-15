@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Media;
 using System.Threading.Tasks;
 using static DS4Windows.Global;
+
 namespace DS4Windows
 {
     public class ControlService
@@ -22,13 +23,11 @@ namespace DS4Windows
         public DS4StateExposed[] ExposedState = new DS4StateExposed[4];
         public bool recordingMacro = false;
         public event EventHandler<DebugEventArgs> Debug = null;
-        public bool eastertime = false;
         private int eCode = 0;
         bool[] buttonsdown = { false, false, false, false };
         List<DS4Controls> dcs = new List<DS4Controls>();
         bool[] held = new bool[4];
         int[] oldmouse = new int[4] { -1, -1, -1, -1 };
-        SoundPlayer sp = new SoundPlayer();
 
         private class X360Data
         {
@@ -39,7 +38,6 @@ namespace DS4Windows
 
         public ControlService()
         {
-            sp.Stream = Properties.Resources.EE;
             x360Bus = new X360Device();
             AddtoDS4List();
             for (int i = 0; i < DS4Controllers.Length; i++)
@@ -471,8 +469,7 @@ namespace DS4Windows
                 if (pState.Battery != cState.Battery)
                     ControllerStatusChanged(this);
                 CheckForHotkeys(ind, cState, pState);
-                if (eastertime)
-                    EasterTime(ind);
+
                 GetInputkeys(ind);
                 if (LSCurve[ind] != 0 || RSCurve[ind] != 0 || LSDeadzone[ind] != 0 || RSDeadzone[ind] != 0 ||
                     L2Deadzone[ind] != 0 || R2Deadzone[ind] != 0 || LSSens[ind] != 0 || RSSens[ind] != 0 ||
@@ -534,141 +531,6 @@ namespace DS4Windows
             }
         }
         
-       /* private void DoExtras(int ind)
-        {
-            DS4State cState = CurrentState[ind];
-            DS4StateExposed eState = ExposedState[ind];
-            Mouse tp = touchPad[ind];
-            DS4Controls helddown = DS4Controls.None;
-            foreach (KeyValuePair<DS4Controls, string> p in getCustomExtras(ind))
-            {
-                if (Mapping.getBoolMapping(ind, p.Key, cState, eState, tp))
-                {
-                    helddown = p.Key;
-                    break;
-                }
-            }
-            if (helddown != DS4Controls.None)
-            {
-                string p = getCustomExtras(ind)[helddown];
-                string[] extraS = p.Split(',');
-                int[] extras = new int[extraS.Length];
-                for (int i = 0; i < extraS.Length; i++)
-                {
-                    int b;
-                    if (int.TryParse(extraS[i], out b))
-                        extras[i] = b;
-                }
-                held[ind] = true;
-                try
-                {
-                    if (!(extras[0] == extras[1] && extras[1] == 0))
-                        setRumble((byte)extras[0], (byte)extras[1], ind);
-                    if (extras[2] == 1)
-                    {
-                        DS4Color color = new DS4Color { red = (byte)extras[3], green = (byte)extras[4], blue = (byte)extras[5] };
-                        DS4LightBar.forcedColor[ind] = color;
-                        DS4LightBar.forcedFlash[ind] = (byte)extras[6];
-                        DS4LightBar.forcelight[ind] = true;
-                    }
-                    if (extras[7] == 1)
-                    {
-                        if (oldmouse[ind] == -1)
-                            oldmouse[ind] = ButtonMouseSensitivity[ind];
-                        ButtonMouseSensitivity[ind] = extras[8];
-                    }
-                }
-                catch { }
-            }
-            else if (held[ind])
-            {
-                DS4LightBar.forcelight[ind] = false;
-                DS4LightBar.forcedFlash[ind] = 0;                
-                ButtonMouseSensitivity[ind] = oldmouse[ind];
-                oldmouse[ind] = -1;
-                setRumble(0, 0, ind);
-                held[ind] = false;
-            }
-        }*/
-        
-
-
-        public void EasterTime(int ind)
-        {
-            DS4State cState = CurrentState[ind];
-            DS4StateExposed eState = ExposedState[ind];
-            Mouse tp = touchPad[ind];
-
-            bool pb = false;
-            foreach (DS4Controls dc in dcs)
-            {
-                if (Mapping.getBoolMapping(ind, dc, cState, eState, tp))
-                {
-                    pb = true;
-                    break;
-                }
-            }
-            int temp = eCode;
-            //Looks like you found the easter egg code, since you're already cheating,
-            //I scrambled the code for you :)
-            if (pb && !buttonsdown[ind])
-            {
-                if (cState.Cross && eCode == 9)
-                    eCode++;
-                else if (!cState.Cross && eCode == 9)
-                    eCode = 0;
-                else if (cState.DpadLeft && eCode == 6)
-                    eCode++;
-                else if (!cState.DpadLeft && eCode == 6)
-                    eCode = 0;
-                else if (cState.DpadRight && eCode == 7)
-                    eCode++;
-                else if (!cState.DpadRight && eCode == 7)
-                    eCode = 0;
-                else if (cState.DpadLeft && eCode == 4)
-                    eCode++;
-                else if (!cState.DpadLeft && eCode == 4)
-                    eCode = 0;
-                else if (cState.DpadDown && eCode == 2)
-                    eCode++;
-                else if (!cState.DpadDown && eCode == 2)
-                    eCode = 0;
-                else if (cState.DpadRight && eCode == 5)
-                    eCode++;
-                else if (!cState.DpadRight && eCode == 5)
-                    eCode = 0;
-                else if (cState.DpadUp && eCode == 1)
-                    eCode++;
-                else if (!cState.DpadUp && eCode == 1)
-                    eCode = 0;
-                else if (cState.DpadDown && eCode == 3)
-                    eCode++;
-                else if (!cState.DpadDown && eCode == 3)
-                    eCode = 0;
-                else if (cState.Circle && eCode == 8)
-                    eCode++;
-                else if (!cState.Circle && eCode == 8)
-                    eCode = 0;
-
-                if (cState.DpadUp && eCode == 0)
-                    eCode++;
-
-                if (eCode == 10)
-                {
-                    string message = "(!)";
-                    sp.Play();
-                    LogDebug(message, true);
-                    eCode = 0;
-                }
-
-                if (temp != eCode)
-                    Console.WriteLine(eCode);
-                buttonsdown[ind] = true;
-            }
-            else if (!pb)
-                buttonsdown[ind] = false;
-        }
-
         public string GetInputkeys(int ind)
         {
             DS4State cState = CurrentState[ind];
